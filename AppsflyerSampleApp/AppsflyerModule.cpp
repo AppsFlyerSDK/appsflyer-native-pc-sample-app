@@ -74,7 +74,7 @@ public:
 			std::string userAgentStr = "Native PC/HTTP Client 1.0 (" + _appid + ")";
 			const char *userAgent = userAgentStr.c_str();
 			curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent);
-			 curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
+			// curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
 
 			/* Perform the request, res will get the return code */
 			curl_easy_perform(curl);
@@ -104,7 +104,7 @@ public:
 		int af_counter = get_AF_counter();
 		if (af_counter < 2)
 		{
-			//auto [res, rescode] = af_firstOpenRequest(req);
+			// auto [res, rescode] = af_firstOpenRequest(req);
 			tuple<CURLcode, long> tpl = af_firstOpenRequest(req);
 			CURLcode res = std::get<CURLcode>(tpl);
 			long rescode = std::get<long>(tpl);
@@ -112,7 +112,7 @@ public:
 		}
 		else
 		{
-			//auto [res, rescode] = af_sessionRequest(req);
+			// auto [res, rescode] = af_sessionRequest(req);
 			tuple<CURLcode, long> tpl = af_sessionRequest(req);
 			CURLcode res = std::get<CURLcode>(tpl);
 			long rescode = std::get<long>(tpl);
@@ -133,7 +133,7 @@ public:
 
 		oss << "{\"device_ids\":[{\"type\":\"" << req.device_ids[0].type << "\",\"value\":\"" << req.device_ids[0].value << "\"}],\"request_id\":\"" << req.request_id << "\",\"device_os_version\":\"" << req.device_os_version << "\",\"device_model\":\"" << req.device_model << "\",\"limit_ad_tracking\":" << req.limit_ad_tracking << ",\"app_version\":\"" << req.app_version << "\",\"event_parameters\":" << event_parameters_j_str << ",\"event_name\":\"" << req.event_name << "\"}";
 		std::string jsonData = oss.str();
-		//auto [res, rescode] = send_http_post(url, jsonData, INAPP_EVENT_REQUEST);
+		// auto [res, rescode] = send_http_post(url, jsonData, INAPP_EVENT_REQUEST);
 		tuple<CURLcode, long> tpl = send_http_post(url, jsonData, INAPP_EVENT_REQUEST);
 		CURLcode res = std::get<CURLcode>(tpl);
 		long rescode = std::get<long>(tpl);
