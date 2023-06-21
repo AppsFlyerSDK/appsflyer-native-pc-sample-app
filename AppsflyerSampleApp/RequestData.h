@@ -3,6 +3,7 @@
 #include <vector>
 #include "DeviceID.h"
 #include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 
 class RequestData {
@@ -16,5 +17,5 @@ public:
 	std::string request_id;
 	std::string limit_ad_tracking;
 	std::string event_name;
-	json event_values;
+	json event_parameters;
 };

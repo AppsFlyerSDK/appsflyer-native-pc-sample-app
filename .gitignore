@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+*.tlog
+*.ipch
+*.pdb
+
+.vs/
+.x64/
+AppsflyerSampleApp/x64/
+.vscode/settings.json

@@ -1,4 +1,3 @@
-#include <curl/curl.h>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -7,24 +6,30 @@ using json = nlohmann::json;
 
 using namespace std;
 
-
-CAppsflyerLauncherModule* AppsflyerLauncherModule()
+CAppsflyerLauncherModule *AppsflyerLauncherModule()
 {
 	static CAppsflyerLauncherModule inv;
 	return &inv;
 }
 
-CAppsflyerLauncherModule::CAppsflyerLauncherModule() { }
+CAppsflyerLauncherModule::CAppsflyerLauncherModule()
+{
+}
 
-void CAppsflyerLauncherModule::start(const char * dkey, const char * appid) {
-	// testing af_firstOpen/af_session and af_inappEvent 
+void CAppsflyerLauncherModule::init(const char *dkey, const char *appid)
+{
 	devkey = dkey;
 	appID = appid;
+}
+
+void CAppsflyerLauncherModule::start(bool skipFirst)
+{
 	AppsflyerModule afc(devkey, appID);
 
+	// app build id
 	std::string app_version = "1.0.0";
 
-	//create timestamp
+	// create timestamp
 	std::time_t t = std::time(0);
 	std::ostringstream oss;
 	oss << t;
@@ -38,21 +43,28 @@ void CAppsflyerLauncherModule::start(const char * dkey, const char * appid) {
 	req.limit_ad_tracking = "false";
 	req.request_id = afc.uuid_gen().c_str();
 
-	//adding AF id to the request
+	// adding AF id to the request
 	DeviceIDs af_id;
 	af_id.type = "custom";
 	af_id.value = afc.get_AF_id().c_str();
 	req.device_ids.insert(req.device_ids.end(), af_id);
 
-	afc.af_firstOpen_init(req);
+	tuple<CURLcode, long, int> tpl = afc.af_firstOpen_init(req);
+	CURLcode res = std::get<CURLcode>(tpl);
+	long rescode = std::get<long>(tpl);
+	int context = std::get<int>(tpl);
+	//auto [res, rescode, context] = afc.af_firstOpen_init(req);
+	AppsflyerLauncherModule()->onHTTPCallBack(res, rescode, context);
 }
 
-void CAppsflyerLauncherModule::logEvent(std::string event_name, json event_values) {
+void CAppsflyerLauncherModule::logEvent(std::string event_name, json event_parameters)
+{
 	AppsflyerModule afc(devkey, appID);
 
+	// app build id
 	std::string app_version = "1.0.0";
 
-	//create timestamp
+	// create timestamp
 	std::time_t t = std::time(0);
 	std::ostringstream oss;
 	oss << t;
@@ -62,17 +74,98 @@ void CAppsflyerLauncherModule::logEvent(std::string event_name, json event_value
 	req.timestamp = timestamp;
 	req.device_os_version = "1.0.0";
 	req.app_version = app_version;
-	req.device_model = afc.get_OS(); //TODO: check how to retreive device model - in the meantime send 'steam'
+	req.device_model = afc.get_OS();
 	req.limit_ad_tracking = "false";
 	req.request_id = afc.uuid_gen().c_str();
 
-	//adding AF id to the request
+	// adding AF id to the request
 	DeviceIDs af_id;
 	af_id.type = "custom";
 	af_id.value = afc.get_AF_id().c_str();
 	req.device_ids.insert(req.device_ids.end(), af_id);
-	req.event_name = event_name;
-	req.event_values = event_values;
 
-	afc.af_inappEvent(req);
+	req.event_name = event_name;
+	req.event_parameters = event_parameters;
+
+	tuple<CURLcode, long, int> tpl = afc.af_inappEvent(req);
+	CURLcode res = std::get<CURLcode>(tpl);
+	long rescode = std::get<long>(tpl);
+	int context = std::get<int>(tpl);
+	//auto [res, rescode, context] = afc.af_inappEvent(req);
+	AppsflyerLauncherModule()->onHTTPCallBack(res, rescode, context);
+}
+
+void CAppsflyerLauncherModule::onHTTPCallBack(CURLcode res, long responseCode, int context)
+{
+	if (res != CURLE_OK)
+	{
+		// response failed
+		onCallbackFailure(responseCode, context);
+	}
+	else
+	{
+		onCallbackSuccess(responseCode, context);
+		AppsflyerModule afc(devkey, appID);
+
+		switch (context)
+		{
+		case FIRST_OPEN_REQUEST:
+		case SESSION_REQUEST:
+			if (responseCode == 202)
+			{
+				afc.increase_AF_counter();
+			}
+			break;
+		case INAPP_EVENT_REQUEST:
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void CAppsflyerLauncherModule::onCallbackSuccess(long responseCode, int context)
+{
+	// Handle Success
+	switch (context)
+	{
+	case FIRST_OPEN_REQUEST:
+	case SESSION_REQUEST:
+		// ** handle success for these callback **
+		break;
+	case INAPP_EVENT_REQUEST:
+		// ** handle success for this callback **
+		break;
+	default:
+		break;
+	}
+}
+
+void CAppsflyerLauncherModule::onCallbackFailure(long responseCode, int context)
+{
+	// Handle Failure
+	switch (context)
+	{
+	case FIRST_OPEN_REQUEST:
+	case SESSION_REQUEST:
+		// ** handle failure for these callback **
+		break;
+	case INAPP_EVENT_REQUEST:
+		// ** handle failure for this callback **
+		break;
+	default:
+		break;
+	}
+}
+
+// bool CAppsflyerLauncherModule::isInstallOlderThanDate(std::string datestring)
+// {
+// 	AppsflyerModule afc(devkey, appID);
+// 	return afc.isInstallOlderThanDate(datestring);
+// }
+
+std::string CAppsflyerLauncherModule::getAppsFlyerUID()
+{
+	AppsflyerModule afc(devkey, appID);
+	return afc.get_AF_id();
 }
