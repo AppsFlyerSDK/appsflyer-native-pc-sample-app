@@ -1,3 +1,11 @@
+---
+title: Native PC C++
+category: 6446526dddf659006c7ea807
+order: 11
+hidden: false
+slug: nativepc-vanilla
+---
+
 # AppsFlyer Windows Launcher Integration
 
 > 🚧 OS-Restriction
