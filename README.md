@@ -33,8 +33,9 @@ you may use this sample app as a reference for integrating AppsFlyer into your C
 [vcpkg](https://vcpkg.io/en/index.html) - openssl & nlohmann-json packages
 
 ```
+vcpkg install curl:x86-windows
 vcpkg install nlohmann-json:x86-windows
-vcpkg install openssl:x86-windows</code></pre>
+vcpkg install openssl:x86-windows
 ```
 
 <hr/>
@@ -53,8 +54,6 @@ This method receives your api key and app id, and initializes the AppsFlyer Modu
 
 ```
 AppsflyerLauncherModule()->start("DEV_KEY", "APP_ID");
-</code></pre>
-
 ```
 
 ##### App-Details
@@ -79,7 +78,7 @@ AppsflyerLauncherModule()->logEvent(event_name, event_values);
 ##### \*In order to use json please make sure to use the following imports:
 
 ```
-#include &lt;nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 ```
 
@@ -110,7 +109,7 @@ using json = nlohmann::json;
 3. Import nlohmann-json
 
 ```
-#include &lt;nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 using json = nlohmann::json;
 ```
 
