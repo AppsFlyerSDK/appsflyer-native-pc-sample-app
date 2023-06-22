@@ -6,6 +6,9 @@ hidden: false
 slug: nativepc-vanilla
 ---
 
+> Link to repository  
+> [GitHub](https://github.com/AppsFlyerSDK/appsflyer-native-pc-sample-app)
+
 # AppsFlyer Windows Launcher Integration
 
 > 🚧 OS-Restriction
