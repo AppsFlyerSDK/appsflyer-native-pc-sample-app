@@ -188,30 +188,6 @@ public:
 		return GUID_toString(&gidReference);
 	}
 
-	// Will be added in the future
-	// bool isInstallOlderThanDate(string date)
-	// {
-	// 	bool isInstallOlder = false;
-
-	// 	char *pchFolder = new char[256];
-
-	// 	struct stat result;
-	// 	if (stat(pchFolder, &result) == 0)
-	// 	{
-	// 		//__time64_t excludeInstallDateBefore = "";
-	// 		__time64_t mod_time = result.st_mtime;
-	// 		auto folder_time = ctime(&mod_time);
-	// 		std::time_t excludeInstallDateBefore = to_time_t(date);
-	// 		double diff = difftime(mod_time, excludeInstallDateBefore);
-
-	// 		isInstallOlder = diff < 0;
-
-	// 		auto time = ctime(&mod_time);
-	// 	}
-
-	// 	return isInstallOlder;
-	// }
-
 	std::time_t to_time_t(const std::string &str, bool is_dst = false, const std::string &format = "%Y-%b-%d %H:%M:%S")
 	{
 		std::tm t = {0};
@@ -219,6 +195,24 @@ public:
 		std::istringstream ss(str);
 		ss >> std::get_time(&t, format.c_str());
 		return mktime(&t);
+	}
+
+	bool isInstallOlderThanDate(string date)
+	{
+		bool isInstallOlder = false;
+		TCHAR szPath[MAX_PATH];
+		GetModuleFileName(NULL, szPath, MAX_PATH);
+
+		struct stat result;
+		if (stat(szPath, &result) == 0)
+		{
+			__time64_t mod_time = result.st_mtime;
+			std::time_t excludeInstallDateBefore = to_time_t(date);
+			double diff = difftime(mod_time, excludeInstallDateBefore);
+			isInstallOlder = diff < 0;
+		}
+
+		return isInstallOlder;
 	}
 
 private:

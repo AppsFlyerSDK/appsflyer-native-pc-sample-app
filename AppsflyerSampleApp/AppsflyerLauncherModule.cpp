@@ -16,13 +16,13 @@ CAppsflyerLauncherModule::CAppsflyerLauncherModule()
 {
 }
 
-void CAppsflyerLauncherModule::init(const char *dkey, const char *appid)
+void CAppsflyerLauncherModule::Init(const char *dkey, const char *appid)
 {
 	devkey = dkey;
 	appID = appid;
 }
 
-void CAppsflyerLauncherModule::start(bool skipFirst)
+void CAppsflyerLauncherModule::Start(bool skipFirst)
 {
 	AppsflyerModule afc(devkey, appID);
 
@@ -53,11 +53,11 @@ void CAppsflyerLauncherModule::start(bool skipFirst)
 	CURLcode res = std::get<CURLcode>(tpl);
 	long rescode = std::get<long>(tpl);
 	int context = std::get<int>(tpl);
-	//auto [res, rescode, context] = afc.af_firstOpen_init(req);
-	AppsflyerLauncherModule()->onHTTPCallBack(res, rescode, context);
+	// auto [res, rescode, context] = afc.af_firstOpen_init(req);
+	AppsflyerLauncherModule()->OnHTTPCallBack(res, rescode, context);
 }
 
-void CAppsflyerLauncherModule::logEvent(std::string event_name, json event_parameters)
+void CAppsflyerLauncherModule::LogEvent(std::string event_name, json event_parameters)
 {
 	AppsflyerModule afc(devkey, appID);
 
@@ -91,20 +91,20 @@ void CAppsflyerLauncherModule::logEvent(std::string event_name, json event_param
 	CURLcode res = std::get<CURLcode>(tpl);
 	long rescode = std::get<long>(tpl);
 	int context = std::get<int>(tpl);
-	//auto [res, rescode, context] = afc.af_inappEvent(req);
-	AppsflyerLauncherModule()->onHTTPCallBack(res, rescode, context);
+	// auto [res, rescode, context] = afc.af_inappEvent(req);
+	AppsflyerLauncherModule()->OnHTTPCallBack(res, rescode, context);
 }
 
-void CAppsflyerLauncherModule::onHTTPCallBack(CURLcode res, long responseCode, int context)
+void CAppsflyerLauncherModule::OnHTTPCallBack(CURLcode res, long responseCode, int context)
 {
 	if (res != CURLE_OK)
 	{
 		// response failed
-		onCallbackFailure(responseCode, context);
+		OnCallbackFailure(responseCode, context);
 	}
 	else
 	{
-		onCallbackSuccess(responseCode, context);
+		OnCallbackSuccess(responseCode, context);
 		AppsflyerModule afc(devkey, appID);
 
 		switch (context)
@@ -124,7 +124,7 @@ void CAppsflyerLauncherModule::onHTTPCallBack(CURLcode res, long responseCode, i
 	}
 }
 
-void CAppsflyerLauncherModule::onCallbackSuccess(long responseCode, int context)
+void CAppsflyerLauncherModule::OnCallbackSuccess(long responseCode, int context)
 {
 	// Handle Success
 	switch (context)
@@ -141,7 +141,7 @@ void CAppsflyerLauncherModule::onCallbackSuccess(long responseCode, int context)
 	}
 }
 
-void CAppsflyerLauncherModule::onCallbackFailure(long responseCode, int context)
+void CAppsflyerLauncherModule::OnCallbackFailure(long responseCode, int context)
 {
 	// Handle Failure
 	switch (context)
@@ -158,14 +158,14 @@ void CAppsflyerLauncherModule::onCallbackFailure(long responseCode, int context)
 	}
 }
 
-// bool CAppsflyerLauncherModule::isInstallOlderThanDate(std::string datestring)
-// {
-// 	AppsflyerModule afc(devkey, appID);
-// 	return afc.isInstallOlderThanDate(datestring);
-// }
-
-std::string CAppsflyerLauncherModule::getAppsFlyerUID()
+std::string CAppsflyerLauncherModule::GetAppsFlyerUID()
 {
 	AppsflyerModule afc(devkey, appID);
 	return afc.get_AF_id();
+}
+
+bool CAppsflyerLauncherModule::IsInstallOlderThanDate(std::string datestring)
+{
+	AppsflyerModule afc(devkey, appID);
+	return afc.isInstallOlderThanDate(datestring);
 }

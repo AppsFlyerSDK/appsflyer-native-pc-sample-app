@@ -107,8 +107,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                 hWnd, (HMENU)BTN_LOG_EVENT,
                                 hInst, NULL);
     // Initialize the AF connector
-    AppsflyerLauncherModule()->init("DEV_KEY", "APP_ID");
-    AppsflyerLauncherModule()->start();
+    AppsflyerLauncherModule()->Init("DEV_KEY", "APP_ID");
+    AppsflyerLauncherModule()->Start();
+
+    // will return false
+    bool dateBefore = AppsflyerLauncherModule()->IsInstallOlderThanDate("2023-January-01 23:12:34");
+
+    // will return true
+    bool dateAfter = AppsflyerLauncherModule()->IsInstallOlderThanDate("2024-April-10 23:12:34");
 
     if (!hWnd)
     {
@@ -154,7 +160,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             event_values = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
             event_name = "af_purchase";
             // sending the in-app event via the connector
-            AppsflyerLauncherModule()->logEvent(event_name, event_values);
+            AppsflyerLauncherModule()->LogEvent(event_name, event_values);
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
