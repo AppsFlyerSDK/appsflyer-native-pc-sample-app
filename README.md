@@ -16,7 +16,7 @@ AppsFlyer empowers gaming marketers to make better decisions by providing powerf
 Game attribution requires the game to communicate with AppsFlyer APIs over HTTPS and report user activities like first opens, consecutive sessions, and in-app events. For example, purchase events.
 We recommend you use this sample app as a reference for integrating the code that reports user activities in your C++. **Note**: The sample code that follows is currently only supported in a Windows environment.
 
-**Prerequisites**:
+### Prerequisites
 
 [vcpkg](https://vcpkg.io/en/index.html) openssl & nlohmann-json packages:
 
