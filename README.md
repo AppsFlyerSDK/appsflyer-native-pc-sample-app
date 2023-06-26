@@ -98,6 +98,18 @@ AppsflyerLauncherModule()->LogEvent(event_name, event_parameters);
 using json = nlohmann::json;
 ```
 
+### OnCallbackSuccess, OnCallbackFailure
+
+The above methods are placeholders for the desired actions upon success/failure.  
+It is possible to handle different types of events with the switch case of the context within each function (“FIRST_OPEN_REQUEST”, ”SESSION_REQUEST”, ”INAPP_EVENT_REQUEST”).
+
+**Method signature**
+
+```c++
+void OnCallbackSuccess(long responseCode, uint64 context)
+void OnCallbackFailure(long responseCode, uint64 context)
+```
+
 ### GetAppsFlyerUID
 
 Get AppsFlyer's unique device ID. The SDK generates an AppsFlyer unique device ID upon app installation. When the SDK is started, this ID is recorded as the ID of the first app install.
