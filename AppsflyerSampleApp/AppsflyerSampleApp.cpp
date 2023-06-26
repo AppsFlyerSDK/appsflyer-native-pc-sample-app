@@ -143,7 +143,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_COMMAND:
     {
-        json event_values = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
+        json event_parameters = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
         std::string event_name = "af_purchase";
         int wmId = LOWORD(wParam);
         // Parse the menu selections:
@@ -157,10 +157,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case BTN_LOG_EVENT:
             // Setting the event values json and event name
-            event_values = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
+            event_parameters = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
             event_name = "af_purchase";
             // sending the in-app event via the connector
-            AppsflyerLauncherModule()->LogEvent(event_name, event_values);
+            AppsflyerLauncherModule()->LogEvent(event_name, event_parameters);
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
