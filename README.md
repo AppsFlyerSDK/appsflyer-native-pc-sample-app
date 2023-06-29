@@ -177,3 +177,7 @@ using json = nlohmann::json;
 
 4. [Initialize](#init) and [start](#start) the AppsFlyer integration.
 5. Report [in-app events](#logevent).
+
+## Resetting the attribution
+
+Remove the registry data from `SOFTWARE\Microsoft\Windows\CurrentVersion\Run`. The Registry keys are `AF_counter_[APPID]` and `AF_uuid_[APPID]`.
