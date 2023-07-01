@@ -153,7 +153,7 @@ bool dateAfter = AppsflyerLauncherModule()->IsInstallOlderThanDate("2023-April-1
 1. Install [Visual Studio](https://visualstudio.microsoft.com/).
 2. Open the solution.
 3. Open the `AppsflyerSampleApp.cpp` file.
-4. On line 112, replace `DEV_KEY` and `APP_ID` with your [app details](#app-details).
+4. On line 110, replace `DEV_KEY` and `APP_ID` with your [app details](#app-details).
 5. Run the app by clicking **Play** on the top toolbar (Local Windows Debugger). Make sure that the mode is set to Debug.
 6. After 24 hours, the dashboard updates and shows organic and non-organic installs and in-app events.
 
