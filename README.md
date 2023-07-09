@@ -45,7 +45,7 @@ void Init(const char* devkey, const char* appID)
 **Usage**:
 
 ```c++
-AppsflyerLauncherModule()->Init("DEV_KEY", "APP_ID");
+AppsflyerLauncherModule()->Init(<< DEV_KEY >>, << APP_ID >>);
 ```
 
 <span id="app-details">**Arguments**:</span>
@@ -146,6 +146,10 @@ bool dateBefore = AppsflyerLauncherModule()->IsInstallOlderThanDate("2023-Januar
 
 // will return true
 bool dateAfter = AppsflyerLauncherModule()->IsInstallOlderThanDate("2023-April-10 23:12:34");
+
+// example usage with skipFirst:
+bool isInstallOlderThanDate = AppsflyerLauncherModule()->IsInstallOlderThanDate("2023-April-10 23:12:34");
+AppsflyerLauncherModule()->Start(isInstallOlderThanDate);
 ```
 
 ## Running the sample app
