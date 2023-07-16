@@ -1,7 +1,8 @@
 ---
 title: Native PC C++
+parentDoc: 64ad6456ceede10cf0b2a120
 category: 6446526dddf659006c7ea807
-order: 11
+order: 3
 hidden: false
 slug: nativepc-vanilla
 ---
@@ -137,6 +138,7 @@ bool IsInstallOlderThanDate(std::string datestring)
 ```
 
 **Usage**:
+
 ```c++
 // the modification date in this example is "2023-January-23 08:30:00"
 
