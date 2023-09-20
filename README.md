@@ -74,6 +74,30 @@ bool skipFirst = [SOME_CONDITION];
 AppsflyerLauncherModule()->Start(skipFirst);
 ```
 
+
+
+### Stop
+
+Once this method is invoked, our SDK no longer communicates with our servers and stops functioning.
+Useful when implementing user opt-in/opt-out.
+
+**Method signature**
+
+```c++
+void Stop()
+```
+
+**Usage**:
+
+```c++
+// Starting the SDK
+AppsflyerLauncherModule()->Start();
+// ...
+// Stopping the SDK, preventing further communication with AppsFlyer
+AppsflyerLauncherModule()->Stop();
+```
+
+
 ### LogEvent
 
 This method receives an event name and JSON object and sends in-app events to AppsFlyer.
@@ -98,6 +122,28 @@ AppsflyerLauncherModule()->LogEvent(event_name, event_parameters);
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 ```
+
+
+### SetCustomerUserId
+
+Setting your own customer ID enables you to cross-reference your own unique ID with AppsFlyer’s unique ID and other devices’ IDs.
+This ID is available in raw-data reports and in the Postback APIs for cross-referencing with your internal IDs.
+Can be used only before calling `Start()`.
+
+**Method signature**
+
+```c++
+void SetCustomerUserId(std::string cuid)
+```
+
+**Usage**:
+
+```c++
+AppsflyerLauncherModule()->Init(DEV_KEY, APP_ID);
+AppsflyerLauncherModule()->SetCustomerUserId("Test-18-9-23");
+AppsflyerLauncherModule()->Start();
+```
+
 
 ### OnCallbackSuccess, OnCallbackFailure
 
