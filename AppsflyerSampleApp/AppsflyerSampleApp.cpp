@@ -7,6 +7,7 @@
 
 #define MAX_LOADSTRING 100
 #define BTN_LOG_EVENT 1001
+#define BTN_SDK_STOP 1002
 
 // Global Variables:
 HINSTANCE hInst;                     // current instance
@@ -100,14 +101,22 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
                               CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-    HWND hButton = CreateWindow("button", "InApp Event (LogEvent function)",
+    HWND hButton = CreateWindow("button", "InApp Event (LogEvent() function)",
                                 WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
                                 100, 200,
                                 300, 30,
                                 hWnd, (HMENU)BTN_LOG_EVENT,
                                 hInst, NULL);
+    
+    HWND hButton2 = CreateWindow("button", "Stop the SDK [LogEvent will stop working]",
+                                WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
+                                100, 300,
+                                300, 60,
+                                hWnd, (HMENU)BTN_SDK_STOP,
+                                hInst, NULL);
     // Initialize the AF connector
-    AppsflyerLauncherModule()->Init("DEV_KEY", "APP_ID");
+    AppsflyerLauncherModule()->Init(<< DEV_KEY >> , << APP_ID >>);
+    //AppsflyerLauncherModule()->SetCustomerUserId("cuid-test");
     AppsflyerLauncherModule()->Start();
 
     // will return false
@@ -161,6 +170,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             event_name = "af_purchase";
             // sending the in-app event via the connector
             AppsflyerLauncherModule()->LogEvent(event_name, event_parameters);
+            break;
+        case BTN_SDK_STOP:
+            AppsflyerLauncherModule()->Stop();
             break;
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
