@@ -20,10 +20,12 @@ void CAppsflyerLauncherModule::Init(const char *dkey, const char *appid)
 {
 	devkey = dkey;
 	appID = appid;
+	isStopped = true;
 }
 
-void CAppsflyerLauncherModule::Start(bool skipFirst)
+RequestData CAppsflyerLauncherModule::CreateRequestData()
 {
+	RequestData req;
 	AppsflyerModule afc(devkey, appID);
 
 	// app build id
@@ -35,7 +37,6 @@ void CAppsflyerLauncherModule::Start(bool skipFirst)
 	oss << t;
 	std::string timestamp = oss.str();
 
-	RequestData req;
 	req.timestamp = timestamp;
 	req.device_os_version = "1.0.0";
 	req.app_version = app_version;
@@ -48,6 +49,21 @@ void CAppsflyerLauncherModule::Start(bool skipFirst)
 	af_id.type = "custom";
 	af_id.value = afc.get_AF_id().c_str();
 	req.device_ids.insert(req.device_ids.end(), af_id);
+
+	if (!cuid.empty()) {
+		req.customer_user_id = cuid;
+	}
+
+	return req;
+}
+
+
+void CAppsflyerLauncherModule::Start(bool skipFirst)
+{
+	isStopped = false;
+	AppsflyerModule afc(devkey, appID);
+
+	RequestData req = CreateRequestData();
 
 	tuple<CURLcode, long, int> tpl = afc.af_firstOpen_init(req);
 	CURLcode res = std::get<CURLcode>(tpl);
@@ -57,32 +73,20 @@ void CAppsflyerLauncherModule::Start(bool skipFirst)
 	AppsflyerLauncherModule()->OnHTTPCallBack(res, rescode, context);
 }
 
+void CAppsflyerLauncherModule::Stop()
+{
+	isStopped = true;
+}
+
 void CAppsflyerLauncherModule::LogEvent(std::string event_name, json event_parameters)
 {
+	if (isStopped) {
+		return;
+	}
+
 	AppsflyerModule afc(devkey, appID);
 
-	// app build id
-	std::string app_version = "1.0.0";
-
-	// create timestamp
-	std::time_t t = std::time(0);
-	std::ostringstream oss;
-	oss << t;
-	std::string timestamp = oss.str();
-
-	RequestData req;
-	req.timestamp = timestamp;
-	req.device_os_version = "1.0.0";
-	req.app_version = app_version;
-	req.device_model = afc.get_OS();
-	req.limit_ad_tracking = "false";
-	req.request_id = afc.uuid_gen().c_str();
-
-	// adding AF id to the request
-	DeviceIDs af_id;
-	af_id.type = "custom";
-	af_id.value = afc.get_AF_id().c_str();
-	req.device_ids.insert(req.device_ids.end(), af_id);
+	RequestData req = CreateRequestData();
 
 	req.event_name = event_name;
 	req.event_parameters = event_parameters;
@@ -93,6 +97,16 @@ void CAppsflyerLauncherModule::LogEvent(std::string event_name, json event_param
 	int context = std::get<int>(tpl);
 	// auto [res, rescode, context] = afc.af_inappEvent(req);
 	AppsflyerLauncherModule()->OnHTTPCallBack(res, rescode, context);
+}
+
+void CAppsflyerLauncherModule::SetCustomerUserId(std::string customerUserID)
+{
+	if (!isStopped) {
+		// Cannot set CustomerUserID while the SDK has started.
+		return;
+	}
+	// Customer User ID has been set
+	cuid = customerUserID;
 }
 
 void CAppsflyerLauncherModule::OnHTTPCallBack(CURLcode res, long responseCode, int context)
