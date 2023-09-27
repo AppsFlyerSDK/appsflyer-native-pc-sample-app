@@ -33,6 +33,7 @@ vcpkg install openssl:x86-windows
 
 `AppsflyerLauncherModule.h`, included in the `appsflyer-module` folder, contains the required code and logic to connect to AppsFlyer servers and report events.
 
+
 ### Init
 
 This method receives your API key and app ID and initializes the AppsFlyer Module.
@@ -51,7 +52,8 @@ AppsflyerLauncherModule()->Init(<< DEV_KEY >>, << APP_ID >>);
 
 <span id="app-details">**Arguments**:</span>
 
-- `APP_ID`, `DEV_KEY`: Get from the marketer or [AppsFlyer HQ](https://support.appsflyer.com/hc/en-us/articles/211719806-App-settings-#general-app-settings).
+- `APP_ID`: Your app id.
+- `DEV_KEY`: Get from the marketer or [AppsFlyer HQ](https://support.appsflyer.com/hc/en-us/articles/211719806-App-settings-#general-app-settings).
 
 ### Start
 
