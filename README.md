@@ -76,12 +76,9 @@ bool skipFirst = [SOME_CONDITION];
 AppsflyerLauncherModule()->Start(skipFirst);
 ```
 
-
-
 ### Stop
 
-Once this method is invoked, our SDK no longer communicates with our servers and stops functioning.
-Useful when implementing user opt-in/opt-out.
+This method stops the SDK from functioning and communicating with AppsFlyer servers. It's used when implementing user opt-in/opt-out.
 
 **Method signature**
 
@@ -128,9 +125,8 @@ using json = nlohmann::json;
 
 ### SetCustomerUserId
 
-Setting your own customer ID enables you to cross-reference your own unique ID with AppsFlyer’s unique ID and other devices’ IDs.
-This ID is available in raw-data reports and in the Postback APIs for cross-referencing with your internal IDs.
-Can be used only before calling `Start()`.
+This method sets a customer ID that enables you to cross-reference your unique ID with the AppsFlyer unique ID and other device IDs. Note: You can only use this method before calling `Start()`.
+The customer ID is available in raw data reports and in the postbacks sent via API.
 
 **Method signature**
 
