@@ -1,4 +1,4 @@
-// AppsflyerSampleApp.cpp : Defines the entry point for the application.
+﻿// AppsflyerSampleApp.cpp : Defines the entry point for the application.
 //
 
 #include "framework.h"
@@ -115,7 +115,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                 hWnd, (HMENU)BTN_SDK_STOP,
                                 hInst, NULL);
     // Initialize the AF connector
-    AppsflyerLauncherModule()->Init(<< DEV_KEY >> , << APP_ID >>);
+    //AppsflyerLauncherModule()->Init(<< DEV_KEY >> , << APP_ID >>);
+    AppsflyerLauncherModule()->Init("bFzaVu2iecN77po5mWMJuL", "12341234");
     //AppsflyerLauncherModule()->SetCustomerUserId("cuid-test");
     AppsflyerLauncherModule()->Start();
 
@@ -152,8 +153,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_COMMAND:
     {
-        json event_parameters = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
+        json event_parameters = {};
+        json event_custom_parameters = {};
         std::string event_name = "af_purchase";
+        std::wstring ws = L"車B1234 こんにちは";
+        std::wstring ws2 = L"新人邀约购物日";
+
         int wmId = LOWORD(wParam);
         // Parse the menu selections:
         switch (wmId)
@@ -166,10 +171,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case BTN_LOG_EVENT:
             // Setting the event values json and event name
-            event_parameters = {{"af_currency", "USD"}, {"af_price", 6.66}, {"af_revenue", 24.12}};
+            event_parameters = { 
+                {"af_currency", "USD"}, 
+                {"af_price", 6.66}, 
+                {"af_revenue", 24.12}
+            };
+            event_custom_parameters = { 
+                {"goodsName", AppsflyerLauncherModule()->to_utf8(ws)}, 
+                {"goodsName2", AppsflyerLauncherModule()->to_utf8(ws2)} 
+            };
             event_name = "af_purchase";
-            // sending the in-app event via the connector
+            // Send LogEvent request
             AppsflyerLauncherModule()->LogEvent(event_name, event_parameters);
+            // Send LogEvent request with custom event params
+            AppsflyerLauncherModule()->LogEvent(event_name, event_parameters, event_custom_parameters);
             break;
         case BTN_SDK_STOP:
             AppsflyerLauncherModule()->Stop();
