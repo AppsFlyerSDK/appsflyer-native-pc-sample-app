@@ -2,6 +2,9 @@
 #include "RequestData.h"
 #include <nlohmann/json.hpp>
 #include <curl/curl.h>
+#include <codecvt> // codecvt_utf8
+#include <locale>  // wstring_convert
+
 using json = nlohmann::json;
 
 class CAppsflyerLauncherModule
@@ -20,13 +23,13 @@ public:
 	void OnCallbackSuccess(long responseCode, int context);
 	void OnCallbackFailure(long responseCode, int context);
 	// This method receives an event name and json object and sends an in-app event to AppsFlyer.
-	void LogEvent(std::string event_name, json event_parameters);
+	void LogEvent(std::string event_name, json event_parameters, json event_custom_parameters = {});
 	void SetCustomerUserId(std::string customerUserID);
 	// returns true whether the game was installed before the given date
 	// bool isInstallOlderThanDate(std::string datestring);
 	std::string GetAppsFlyerUID();
 	bool IsInstallOlderThanDate(std::string datestring);
-
+	std::string to_utf8(std::wstring& wide_string);
 private:
 	const char *devkey;
 	const char *appID;

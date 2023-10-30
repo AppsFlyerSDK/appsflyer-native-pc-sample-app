@@ -19,4 +19,5 @@ public:
 	std::string customer_user_id;
 	std::string event_name;
 	json event_parameters;
+	json event_custom_parameters;
 };

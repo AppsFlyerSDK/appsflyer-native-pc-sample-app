@@ -74,7 +74,7 @@ public:
 			std::string userAgentStr = "Native PC/HTTP Client 1.0 (" + _appid + ")";
 			const char *userAgent = userAgentStr.c_str();
 			curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent);
-			//curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
+			curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
 
 			/* Perform the request, res will get the return code */
 			curl_easy_perform(curl);
@@ -312,8 +312,10 @@ private:
 		oss << "{\"device_ids\":[{\"type\":\"" << req.device_ids[0].type << "\",\"value\":\"" << req.device_ids[0].value << "\"}";
 		oss << "],\"request_id\":\"" << req.request_id << "\",\"device_os_version\":\"" << req.device_os_version << "\",\"device_model\":\"" << req.device_model << "\",\"limit_ad_tracking\":" << req.limit_ad_tracking << ",\"app_version\":\"" << req.app_version << "\"";
 		if (isEvent) {
-			auto event_parameters_j_str = to_string(req.event_parameters); // calling nlohmann::to_string
-			oss << ",\"event_parameters\":" << event_parameters_j_str << ",\"event_name\":\"" << req.event_name << "\"";
+			oss << ",\"event_parameters\":" << req.event_parameters << ",\"event_name\":\"" << req.event_name << "\"";
+			if (!req.event_custom_parameters.is_null()) {
+				oss << ",\"event_custom_parameters\":" << req.event_custom_parameters;
+			}
 		}
 		if (!req.customer_user_id.empty()) {
 			oss << ",\"customer_user_id\":\"" << req.customer_user_id << "\"";
