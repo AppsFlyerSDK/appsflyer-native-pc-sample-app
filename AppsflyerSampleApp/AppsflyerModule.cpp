@@ -74,7 +74,7 @@ public:
 			std::string userAgentStr = "Native PC/HTTP Client 1.0 (" + _appid + ")";
 			const char *userAgent = userAgentStr.c_str();
 			curl_easy_setopt(curl, CURLOPT_USERAGENT, userAgent);
-			curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
+			// curl_easy_setopt(curl, CURLOPT_PROXY, "127.0.0.1:8888"); // redirect traffic to Fiddler for debugging
 
 			/* Perform the request, res will get the return code */
 			curl_easy_perform(curl);
