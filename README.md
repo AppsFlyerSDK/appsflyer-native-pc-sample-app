@@ -15,7 +15,9 @@ slug: nativepc-vanilla
 AppsFlyer empowers gaming marketers to make better decisions by providing powerful tools that solve real pain points, including cross-platform attribution, mobile and web analytics, deep linking, fraud detection, privacy management and preservation, and more.
 
 Game attribution requires the game to communicate with AppsFlyer APIs over HTTPS and report user activities like first opens, consecutive sessions, and in-app events. For example, purchase events.
-We recommend you use this sample app as a reference for integrating the code that reports user activities in your C++. **Note**: The sample code that follows is currently only supported in a Windows environment.
+We recommend you use this sample app as a reference for integrating the code that reports user activities in your C++. 
+
+**Note**: The sample code that follows is currently only supported in a Windows environment.
 
 ### Prerequisites
 
