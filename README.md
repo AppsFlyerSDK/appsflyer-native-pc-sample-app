@@ -54,7 +54,7 @@ AppsflyerLauncherModule()->Init(<< DEV_KEY >>, << APP_ID >>);
 
 <span id="app-details">**Arguments**:</span>
 
-- `APP_ID`: Your app id.
+- `APP_ID`: Your app id (excluding the `nativepc-` prefix).
 - `DEV_KEY`: Get from the marketer or [AppsFlyer HQ](https://support.appsflyer.com/hc/en-us/articles/211719806-App-settings-#general-app-settings).
 
 ### Start
